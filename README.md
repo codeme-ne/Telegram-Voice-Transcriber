@@ -1,6 +1,8 @@
 # Telegram Voice Transcriber
 
-Export and transcribe Telegram voice messages locally using Whisper AI. **No Telegram Premium required.**
+**Local-first Telegram voice transcription. No Telegram Premium required.**
+
+![Demo GIF](screenshots/demo.gif)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.40+-red.svg)
@@ -8,12 +10,12 @@ Export and transcribe Telegram voice messages locally using Whisper AI. **No Tel
 
 ## Features
 
-- **Privacy-first**: All processing happens locally - your data never leaves your machine
-- **Smart filtering**: Filter by sender, message type, date range
-- **Resumable**: Pick up where you left off with automatic state tracking
-- **No Premium needed**: Uses Telegram's free API, not premium features
-- **Web UI**: Simple browser interface with Streamlit
-- **CLI**: Full-featured command line for automation
+- Privacy-first processing on your own machine
+- Works with Telegram's free API (no premium dependency)
+- Streamlit web UI and automation-friendly CLI
+- Date/sender/type filtering for targeted exports
+- Resumable pipeline with persisted state
+- Markdown export for downstream notes and workflows
 
 ## Screenshots
 
@@ -27,17 +29,21 @@ Export and transcribe Telegram voice messages locally using Whisper AI. **No Tel
 
 ## Quick Start
 
-### Web UI (Recommended)
+### Web UI (recommended)
 
 ```bash
-# Install
-pip install -e .
-
-# Run
+python -m pip install -e '.[dev]'
+cp .env.example .env
 streamlit run app.py
 ```
 
-Open http://localhost:8501 and follow the guided setup.
+### CLI
+
+```bash
+export TG_API_ID=your_id
+export TG_API_HASH=your_hash
+tg-transcribe "Chat Name" --year 2025
+```
 
 ### Docker
 
@@ -46,63 +52,88 @@ docker build -t telegram-transcriber .
 docker run -p 8501:8501 telegram-transcriber
 ```
 
-### CLI
+## Environment Variables
 
-```bash
-# Set your API credentials
-export TG_API_ID=your_id
-export TG_API_HASH=your_hash
+### Required
 
-# Preview (dry run)
-tg-transcribe "Chat Name" --year 2025 --dry-run
+- `TG_API_ID`: Telegram API ID from `my.telegram.org`
+- `TG_API_HASH`: Telegram API Hash from `my.telegram.org`
 
-# Full transcription
-tg-transcribe "Chat Name" --year 2025
-```
+### Optional
+
+- `WHISPER_MODEL`: default transcription model (default: `small`)
+- `WHISPER_LANGUAGE`: language hint for Whisper (default: `de`)
+
+Reference: [`.env.example`](.env.example)
+
+## Privacy and Data Retention
+
+Sensitive local data locations:
+- Telegram session material:
+  - CLI session file (default under your selected `--data-dir`, typically `telegram.session`)
+  - Web session file: `.data/web.session.txt`
+- Transcription outputs:
+  - Markdown export at `<data-dir>/<chat>/<year>/output/<chat>-<year>.md`
+- Cache/temp files:
+  - Download cache at `<data-dir>/<chat>/<year>/cache/`
+  - Pipeline state at `<data-dir>/<chat>/<year>/state/state.json`
+  - Web logs at `.data/web/logs/app.log`
+
+Retention guidance:
+- Delete session files when moving machines or after temporary use.
+- Treat exported markdown as sensitive source material.
+- Periodically clear cache/state folders when no longer needed.
 
 ## Getting Telegram API Credentials
 
 1. Go to [my.telegram.org](https://my.telegram.org)
 2. Log in with your phone number
-3. Enter the code sent **via Telegram app** (not SMS!)
-4. Click "API development tools"
-5. Create a new application
-6. Copy **API ID** and **API Hash**
-
-This takes about 2 minutes and is completely free.
+3. Enter the code sent via Telegram app
+4. Open "API development tools"
+5. Create an app and copy `API ID` + `API Hash`
 
 ## How It Works
 
-1. **Connect**: Authenticate with your Telegram account
-2. **Select**: Choose a chat and configure filters
-3. **Process**: Voice messages are downloaded and transcribed locally
-4. **Export**: Get a clean Markdown file organized by date
+1. Authenticate with Telegram
+2. Select chat, date range, and message filters
+3. Download and transcribe voice messages locally
+4. Export markdown grouped for practical review
 
 ## Requirements
 
 - Python 3.10+
-- ffmpeg (`sudo apt install ffmpeg` on Ubuntu)
-- ~2GB disk space for Whisper models (downloaded on first use)
-
-## Tech Stack
-
-- **Telethon**: Telegram MTProto client
-- **faster-whisper**: Optimized Whisper inference
-- **Streamlit**: Web UI framework
-- **Typer**: CLI framework
+- `ffmpeg` (`sudo apt install ffmpeg` on Ubuntu)
+- ~2GB disk space for Whisper models (first run)
 
 ## Development
 
 ```bash
-# Install with dev dependencies
-pip install -e '.[dev]'
-
-# Run tests
-pytest
-
-# Run single test
-pytest tests/test_pipeline.py -v
+python -m pip install -e '.[dev]'
+pytest -q
 ```
+
+### Test Matrix
+
+- Unit tests: pure module behavior (`config`, `filters`, `state`, exporters)
+- CLI tests: command parsing and configuration wiring
+- Integration-like tests: pipeline orchestration with mocked external calls
+
+Coverage command:
+
+```bash
+pytest --cov=telegram_voice_transcriber --cov-report=term-missing
+```
+
+## Contributing
+
+- [Contributing Guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Issue Templates](.github/ISSUE_TEMPLATE)
+- [Pull Request Template](.github/PULL_REQUEST_TEMPLATE.md)
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting, local threat model notes, and secure runtime practices.
 
 ## License
 
