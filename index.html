@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Telegram Voice Transcriber - Demo</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121a2b;
+      --text: #e5ecff;
+      --muted: #9db0d8;
+      --accent: #4ea1ff;
+      --line: #24314f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+      background: radial-gradient(circle at 20% 0%, #1a2745 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    h1 {
+      margin: 8px 0 10px;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.1;
+    }
+    p { margin: 0 0 14px; color: var(--muted); }
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #18233c;
+    }
+    .btn.primary {
+      background: var(--accent);
+      color: #04132b;
+      border-color: transparent;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .panel h2 { margin: 0 0 10px; font-size: 20px; }
+    .media {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      display: block;
+      background: #0f1729;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0f1729;
+    }
+    .card img { width: 100%; display: block; }
+    .card .cap { padding: 10px 12px; color: var(--muted); font-size: 14px; }
+    code {
+      background: #091127;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 2px 6px;
+      color: #bfd4ff;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="kicker">Portfolio Demo</div>
+      <h1>Telegram Voice Transcriber</h1>
+      <p>Local-first Telegram voice transcription workflow with Streamlit UI and CLI. No Telegram Premium required.</p>
+      <p>This Vercel page showcases the real app flow and links to source + local run instructions.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/codeme-ne/Telegram-Voice-Transcriber" target="_blank" rel="noreferrer">Open GitHub Repo</a>
+        <a class="btn" href="https://github.com/codeme-ne/Telegram-Voice-Transcriber/blob/main/README.md" target="_blank" rel="noreferrer">Read Setup Guide</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Recorded App Demo</h2>
+      <img class="media" src="screenshots/demo.gif" alt="Telegram Voice Transcriber demo" />
+    </section>
+
+    <section class="panel">
+      <h2>Key Screens</h2>
+      <div class="grid">
+        <article class="card">
+          <img src="screenshots/01-login.png" alt="Login screen" />
+          <div class="cap">Login and API credential flow</div>
+        </article>
+        <article class="card">
+          <img src="screenshots/02-chat-selection.png" alt="Chat selection" />
+          <div class="cap">Chat selection and filter setup</div>
+        </article>
+        <article class="card">
+          <img src="screenshots/03-processing.png" alt="Processing" />
+          <div class="cap">Processing/transcription pipeline</div>
+        </article>
+        <article class="card">
+          <img src="screenshots/04-result.png" alt="Result" />
+          <div class="cap">Markdown export result</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Run Locally</h2>
+      <p>This app performs real transcription locally (Python + Whisper). Quickstart:</p>
+      <p><code>python3 -m pip install -e '.[dev]' && streamlit run app.py</code></p>
+    </section>
+  </main>
+</body>
+</html>
